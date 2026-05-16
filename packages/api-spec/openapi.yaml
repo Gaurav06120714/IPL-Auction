@@ -1,0 +1,545 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: IPL Fantasy Auction API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: rooms
+    description: Room management
+  - name: auction
+    description: Auction operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /rooms:
+    post:
+      operationId: createRoom
+      tags: [rooms]
+      summary: Create a new room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateRoomRequest"
+      responses:
+        "201":
+          description: Room created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+
+  /rooms/{roomId}:
+    get:
+      operationId: getRoom
+      tags: [rooms]
+      summary: Get room details
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Room details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+        "404":
+          description: Room not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /rooms/{roomId}/join:
+    post:
+      operationId: joinRoom
+      tags: [rooms]
+      summary: Join a room
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JoinRoomRequest"
+      responses:
+        "200":
+          description: Joined room
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JoinRoomResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /rooms/{roomId}/start:
+    post:
+      operationId: startAuction
+      tags: [auction]
+      summary: Start the auction (host only)
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartAuctionRequest"
+      responses:
+        "200":
+          description: Auction started
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /rooms/{roomId}/bid:
+    post:
+      operationId: placeBid
+      tags: [auction]
+      summary: Place a bid
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlaceBidRequest"
+      responses:
+        "200":
+          description: Bid placed
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BidResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /rooms/{roomId}/state:
+    get:
+      operationId: getAuctionState
+      tags: [auction]
+      summary: Get current auction state
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auction state
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuctionState"
+
+  /rooms/{roomId}/users/{userId}/squad:
+    get:
+      operationId: getUserSquad
+      tags: [auction]
+      summary: Get a user's squad
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User squad
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SquadResponse"
+
+  /rooms/{roomId}/results:
+    get:
+      operationId: getResults
+      tags: [auction]
+      summary: Get auction results
+      parameters:
+        - name: roomId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Auction results
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResultsResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+
+    CreateRoomRequest:
+      type: object
+      properties:
+        hostName:
+          type: string
+        teamName:
+          type: string
+      required:
+        - hostName
+        - teamName
+
+    JoinRoomRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        teamName:
+          type: string
+      required:
+        - name
+        - teamName
+
+    JoinRoomResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+        roomId:
+          type: string
+        name:
+          type: string
+        teamName:
+          type: string
+        isHost:
+          type: boolean
+      required:
+        - userId
+        - roomId
+        - name
+        - teamName
+        - isHost
+
+    StartAuctionRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+      required:
+        - userId
+
+    PlaceBidRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+        amount:
+          type: number
+      required:
+        - userId
+        - amount
+
+    BidResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        currentBid:
+          type: number
+        highestBidderId:
+          type: integer
+        timeRemaining:
+          type: integer
+      required:
+        - success
+        - currentBid
+        - highestBidderId
+        - timeRemaining
+
+    RoomUser:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        teamName:
+          type: string
+        balance:
+          type: number
+        squadCount:
+          type: integer
+        isHost:
+          type: boolean
+      required:
+        - id
+        - name
+        - teamName
+        - balance
+        - squadCount
+        - isHost
+
+    RoomResponse:
+      type: object
+      properties:
+        roomId:
+          type: string
+        status:
+          type: string
+          enum: [waiting, active, finished]
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomUser"
+      required:
+        - roomId
+        - status
+        - users
+
+    Player:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        role:
+          type: string
+        country:
+          type: string
+        category:
+          type: string
+          enum: [uncapped, capped, goat]
+        basePrice:
+          type: number
+        powerScore:
+          type: integer
+      required:
+        - id
+        - name
+        - role
+        - country
+        - category
+        - basePrice
+        - powerScore
+
+    AuctionState:
+      type: object
+      properties:
+        roomId:
+          type: string
+        status:
+          type: string
+          enum: [waiting, active, finished]
+        currentPlayer:
+          nullable: true
+          allOf:
+            - $ref: "#/components/schemas/Player"
+        currentBid:
+          type: number
+          nullable: true
+        highestBidderId:
+          type: integer
+          nullable: true
+        highestBidderName:
+          type: string
+          nullable: true
+        timeRemaining:
+          type: integer
+          nullable: true
+        playersAuctioned:
+          type: integer
+        totalPlayers:
+          type: integer
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoomUser"
+      required:
+        - roomId
+        - status
+        - currentPlayer
+        - currentBid
+        - highestBidderId
+        - highestBidderName
+        - timeRemaining
+        - playersAuctioned
+        - totalPlayers
+        - users
+
+    SquadPlayer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        role:
+          type: string
+        country:
+          type: string
+        category:
+          type: string
+        basePrice:
+          type: number
+        powerScore:
+          type: integer
+        pricePaid:
+          type: number
+      required:
+        - id
+        - name
+        - role
+        - country
+        - category
+        - basePrice
+        - powerScore
+        - pricePaid
+
+    SquadResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+        name:
+          type: string
+        teamName:
+          type: string
+        balance:
+          type: number
+        squadCount:
+          type: integer
+        squad:
+          type: array
+          items:
+            $ref: "#/components/schemas/SquadPlayer"
+        totalPowerScore:
+          type: integer
+      required:
+        - userId
+        - name
+        - teamName
+        - balance
+        - squadCount
+        - squad
+        - totalPowerScore
+
+    ResultEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        userId:
+          type: integer
+        name:
+          type: string
+        teamName:
+          type: string
+        totalPowerScore:
+          type: integer
+        squadCount:
+          type: integer
+        balance:
+          type: number
+        squad:
+          type: array
+          items:
+            $ref: "#/components/schemas/SquadPlayer"
+      required:
+        - rank
+        - userId
+        - name
+        - teamName
+        - totalPowerScore
+        - squadCount
+        - balance
+        - squad
+
+    ResultsResponse:
+      type: object
+      properties:
+        roomId:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResultEntry"
+      required:
+        - roomId
+        - results

@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment files
+.env
+.env.local
+.env.production
+apps/api/.env
+apps/web/.env
+backend/.env
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Replit artifacts
+.replit-artifact/
+.replit
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# macOS
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo
+
+# Database
+*.sqlite
+*.db

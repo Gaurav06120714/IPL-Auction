@@ -1,0 +1,25 @@
+packages:
+  "socket.io-client": "Real-time communication with the backend for live auction updates"
+  "framer-motion": "Smooth animations for player reveals, bidding, and transitions"
+  "canvas-confetti": "Celebration effects for the results page"
+  "@types/canvas-confetti": "Types for canvas-confetti"
+  "lucide-react": "Icons for the UI"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility for merging tailwind classes without conflicts"
+  "zustand": "Lightweight global state management if needed for socket sync"
+
+images:
+  - path: "artifacts/ipl-auction/public/images/stadium-bg.png"
+    description: "Epic cricket stadium at night under bright floodlights, dramatic atmosphere, neon blue and gold color grading, cinematic, blurry depth of field"
+    aspect_ratio: "16:9"
+  - path: "artifacts/ipl-auction/public/images/player-placeholder.png"
+    description: "Silhouette of a cricket player playing a cover drive, energetic neon outlines on dark navy background, premium sports card style"
+    aspect_ratio: "3:4"
+  - path: "artifacts/ipl-auction/public/images/auction-gavel.png"
+    description: "A shiny golden auction gavel hitting a sound block with glowing energy sparks around it, dark background"
+    aspect_ratio: "1:1"
+
+notes:
+  - Socket.io should connect to '/' with path '/socket.io' as it uses the same proxy server.
+  - The app heavily relies on dark mode, ensure 'dark' class is present or use tailwind dark mode configuration.
+  - React Query hooks from @workspace/api-client-react are generated directly.
