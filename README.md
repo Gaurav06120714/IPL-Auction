@@ -13,6 +13,9 @@ A **real-time multiplayer** IPL Fantasy Auction game where up to 10 players comp
 - **Beautiful UI** — Smooth animations with Framer Motion
 - **WebSocket-Powered** — Instant updates via Socket.io
 - **Responsive Design** — Works on desktop and mobile
+- **Team Composition Rules** — Must have min. 1 WK, 3 batters, 2 bowlers
+- **Auto-bid Mode** — Set a max price and let the system bid for you
+- **Auction History** — Full log of every bid and sold price
 
 ---
 
