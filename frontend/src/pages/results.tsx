@@ -126,8 +126,12 @@ export default function Results() {
         )}
 
         <div className="text-center pb-20 pt-10">
-          <button onClick={() => setLocation("/")} className="text-white/50 hover:text-white transition-colors underline underline-offset-4">
-            Return to Home
+          <button
+            onClick={() => setLocation("/")}
+            className="inline-flex items-center gap-2 px-8 h-12 rounded-xl bg-primary text-primary-foreground font-bold uppercase tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] hover:bg-primary/90 active:scale-[0.98] transition-all shine relative overflow-hidden"
+          >
+            <Trophy className="w-5 h-5" />
+            Play Again
           </button>
         </div>
       </div>

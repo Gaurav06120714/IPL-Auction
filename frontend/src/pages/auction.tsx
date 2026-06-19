@@ -100,7 +100,7 @@ export default function Auction() {
       : "text-white";
 
   return (
-    <div className="h-screen w-full bg-background overflow-hidden flex flex-col">
+    <div className="min-h-screen lg:h-screen w-full bg-background overflow-y-auto lg:overflow-hidden flex flex-col">
       {/* Top Bar */}
       <header className="h-14 border-b border-white/10 bg-black/60 backdrop-blur-sm flex items-center justify-between px-5 shrink-0">
         <div className="flex items-center gap-3">
@@ -124,18 +124,18 @@ export default function Auction() {
         </div>
       </header>
 
-      {/* 3-column layout */}
-      <div className="flex-1 grid grid-cols-[220px_1fr_260px] min-h-0 overflow-hidden">
+      {/* Responsive layout: stacked on mobile, 3 columns on desktop */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[220px_1fr_260px] lg:min-h-0 lg:overflow-hidden">
 
         {/* LEFT: Franchises */}
-        <div className="border-r border-white/5 flex flex-col overflow-hidden">
+        <div className="order-2 lg:order-1 border-t lg:border-t-0 lg:border-r border-white/5 flex flex-col lg:overflow-hidden">
           <div className="px-4 py-3 border-b border-white/5">
             <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest flex items-center justify-between">
               Franchises
               <span className="bg-white/10 text-white/50 px-1.5 py-0.5 rounded text-[10px]">{sortedUsers.length}</span>
             </h3>
           </div>
-          <ScrollArea className="flex-1">
+          <ScrollArea className="max-h-[35vh] lg:max-h-none lg:flex-1">
             <div className="p-3 space-y-2">
               {sortedUsers.map((user) => {
                 const teamInfo = IPL_TEAMS.find((t) => t.id === user.teamName);
@@ -178,13 +178,10 @@ export default function Auction() {
         </div>
 
         {/* CENTER: Auction arena */}
-        <div className="flex flex-col items-center justify-center relative px-6 py-4 overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
-            <img
-              src={`${import.meta.env.BASE_URL}images/auction-gavel.png`}
-              alt=""
-              className="w-80 h-80 object-contain"
-            />
+        <div className="order-1 lg:order-2 min-h-[80vh] lg:min-h-0 flex flex-col items-center justify-center relative px-4 sm:px-6 py-6 lg:overflow-hidden">
+          {/* Ambient gavel glow — CSS only, no external assets */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-[28rem] h-[28rem] rounded-full bg-primary/[0.07] blur-3xl" />
           </div>
 
           <div className="w-full max-w-md space-y-5 z-10">
@@ -314,7 +311,7 @@ export default function Auction() {
         </div>
 
         {/* RIGHT: Squad + Chat */}
-        <div className="border-l border-white/5 flex flex-col overflow-hidden">
+        <div className="order-3 border-t lg:border-t-0 lg:border-l border-white/5 flex flex-col lg:overflow-hidden">
           {/* Squad */}
           <div className="flex-[0_0_auto] border-b border-white/5">
             <div className="px-4 py-3 flex items-center justify-between border-b border-white/5">
@@ -351,7 +348,7 @@ export default function Auction() {
           </div>
 
           {/* Chat */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden min-h-[40vh] lg:min-h-0">
             <div className="px-4 py-2.5 border-b border-white/5 flex items-center gap-2">
               <MessageCircle className="w-3.5 h-3.5 text-white/40" />
               <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest">Chat</h3>

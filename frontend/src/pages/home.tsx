@@ -66,7 +66,11 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="text-center md:text-left space-y-6"
         >
-          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl border border-primary/20 mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm text-xs font-bold uppercase tracking-widest text-white/70">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            Real-time Multiplayer
+          </div>
+          <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-2xl border border-primary/20 glow-gold animate-float">
             <Trophy className="w-10 h-10 text-primary" />
           </div>
           <h1 className="text-5xl md:text-7xl font-display font-black text-white leading-[1.1] uppercase tracking-tight drop-shadow-2xl">
@@ -77,6 +81,18 @@ export default function Home() {
           <p className="text-lg text-white/70 max-w-md mx-auto md:mx-0">
             Create a room, invite your friends, and experience the thrill of a real-time player auction. Build your dream squad with a 100 Crore purse.
           </p>
+          <div className="flex items-center gap-6 justify-center md:justify-start pt-2">
+            {[
+              { value: "100", label: "Players" },
+              { value: "10", label: "Franchises" },
+              { value: "₹100Cr", label: "Purse" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center md:text-left">
+                <div className="text-2xl font-display font-black text-white">{stat.value}</div>
+                <div className="text-[10px] uppercase tracking-widest text-white/40 font-bold">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
@@ -94,22 +110,25 @@ export default function Home() {
               <div className="space-y-4">
                 {activeTab === "join" && (
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Room ID</label>
-                    <Input placeholder="e.g. ABCD1234" value={roomId} onChange={(e) => setRoomId(e.target.value.toUpperCase())} className="bg-black/50 border-white/10 h-12 text-lg focus-visible:ring-primary" />
+                    <label htmlFor="room-id" className="text-xs font-bold text-white/60 uppercase tracking-wider">Room ID</label>
+                    <Input id="room-id" placeholder="e.g. ABCD1234" value={roomId} onChange={(e) => setRoomId(e.target.value.toUpperCase())} className="bg-black/50 border-white/10 h-12 text-lg focus-visible:ring-primary" />
                   </div>
                 )}
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Your Name</label>
-                  <Input placeholder="Enter your alias" value={name} onChange={(e) => setName(e.target.value)} className="bg-black/50 border-white/10 h-12 text-lg focus-visible:ring-primary" />
+                  <label htmlFor="player-name" className="text-xs font-bold text-white/60 uppercase tracking-wider">Your Name</label>
+                  <Input id="player-name" placeholder="Enter your alias" value={name} onChange={(e) => setName(e.target.value)} className="bg-black/50 border-white/10 h-12 text-lg focus-visible:ring-primary" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-white/60 uppercase tracking-wider">Select Franchise</label>
-                  <div className="grid grid-cols-5 gap-2">
+                  <span id="franchise-label" className="text-xs font-bold text-white/60 uppercase tracking-wider">Select Franchise</span>
+                  <div role="radiogroup" aria-labelledby="franchise-label" className="grid grid-cols-5 gap-2">
                     {IPL_TEAMS.map((team) => (
                       <button
                         key={team.id}
+                        role="radio"
+                        aria-checked={selectedTeam === team.id}
+                        aria-label={team.name}
                         onClick={() => setSelectedTeam(team.id)}
-                        className={`aspect-square rounded-xl flex items-center justify-center font-display font-bold text-lg transition-all duration-200 border-2 ${selectedTeam === team.id ? `${team.color} ${team.text} border-white shadow-lg scale-110 z-10` : "bg-black/50 border-white/10 text-white/50 hover:bg-white/10 hover:border-white/30"}`}
+                        className={`aspect-square rounded-xl flex items-center justify-center font-display font-bold text-lg transition-all duration-200 border-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${selectedTeam === team.id ? `${team.color} ${team.text} border-white shadow-lg scale-110 z-10` : "bg-black/50 border-white/10 text-white/50 hover:bg-white/10 hover:border-white/30"}`}
                         title={team.name}
                       >
                         {team.id}
@@ -122,7 +141,7 @@ export default function Home() {
               <Button
                 onClick={handleAction}
                 disabled={isPending}
-                className="w-full h-14 text-lg font-bold uppercase tracking-wider bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all"
+                className="shine relative overflow-hidden w-full h-14 text-lg font-bold uppercase tracking-wider bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all"
               >
                 {isPending ? "Connecting..." : (
                   <span className="flex items-center gap-2">

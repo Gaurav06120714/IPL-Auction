@@ -80,17 +80,22 @@ export default function Lobby() {
               <h2 className="text-2xl font-display font-bold text-white">Franchises ({room.users.length})</h2>
             </div>
             {session?.isHost && (
-              <Button
-                onClick={() => startAuction.mutate()}
-                disabled={startAuction.isPending || room.users.length < 2}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8"
-              >
-                {startAuction.isPending ? "Starting..." : (
-                  <span className="flex items-center gap-2">
-                    <PlayCircle className="w-5 h-5" /> Start Auction
-                  </span>
+              <div className="flex flex-col items-end gap-1.5">
+                <Button
+                  onClick={() => startAuction.mutate()}
+                  disabled={startAuction.isPending || room.users.length < 2}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 shine relative overflow-hidden"
+                >
+                  {startAuction.isPending ? "Starting..." : (
+                    <span className="flex items-center gap-2">
+                      <PlayCircle className="w-5 h-5" /> Start Auction
+                    </span>
+                  )}
+                </Button>
+                {room.users.length < 2 && (
+                  <p className="text-xs text-white/50">Need at least 2 franchises to start</p>
                 )}
-              </Button>
+              </div>
             )}
           </div>
 
